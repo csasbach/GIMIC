@@ -9,6 +9,7 @@ namespace Gimic.Extensions
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposing this makes the stream unreadable.")]
         public static Stream GenerateStreamFromString(this string s)
         {
             var stream = new MemoryStream();

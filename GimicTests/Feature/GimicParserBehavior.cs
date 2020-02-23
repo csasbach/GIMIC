@@ -3,6 +3,7 @@ using Gimic.Interfaces;
 using Gimic.Models;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace GimicTests.Feature
 {
@@ -164,12 +165,12 @@ The quick brown fox jumped over the lazy dog.",
 
         private static string Tabify(string str)
         {
-            return str.Replace("    ", "\t");
+            return str.Replace("    ", "\t", System.StringComparison.InvariantCulture);
         }
 
         private static string Newlineify(string str)
         {
-            return str.Replace("\r\n", "\n");
+            return str.Replace("\r\n", "\n", System.StringComparison.InvariantCulture);
         }
 
         #endregion string formatting helpers
@@ -188,6 +189,12 @@ The quick brown fox jumped over the lazy dog.",
         [TestCase(BIG_TEST)]
         public void It_should_parse_a_newline_delimited_list_of_key_value_pairs(string source)
         {
+            if(source is null)
+            {
+                Assert.Fail();
+                return;
+            }
+
             // ARRANGE
             var stream = Tabify(source).GenerateStreamFromString();
 

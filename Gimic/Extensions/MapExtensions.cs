@@ -13,6 +13,7 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static IMap<string, dynamic> CloseIfComplete(this IMap<string, dynamic> map, Line line)
         {
+            if (map is null || line is null) return null;
             if (line.TabCount < map.NestingLevel)
             {
                 line.NormalizeOutdentRelativeTo(map);

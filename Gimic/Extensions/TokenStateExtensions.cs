@@ -34,6 +34,7 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static string CaptureAndEscapeToken(this TokenState tokenState, string myValue, string token)
         {
+            if (tokenState is null || myValue is null || token is null) return string.Empty;
             var tokenId = Guid.NewGuid().ToString();
             myValue += tokenId;
             tokenState.CapturedTokens.Add((token, tokenId));
@@ -49,6 +50,7 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static string CaptureAndEscapeOddIndexedChunks(this TokenState tokenState, string myValue, List<string> chunked)
         {
+            if (tokenState is null || myValue is null || chunked is null) return string.Empty;
             var chunkIndex = 0;
             foreach (var chunk in chunked)
             {
@@ -72,6 +74,7 @@ namespace Gimic.Extensions
         /// <param name="chunked"></param>
         public static void StartPartialToken(this TokenState tokenState, List<string> chunked)
         {
+            if (tokenState is null || chunked is null) return;
             var last = chunked.Last();
             chunked.Remove(last);
 
@@ -87,6 +90,7 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static string CaptureAndEscapeThePartialToken(this TokenState tokenState, string myValue, List<string> chunked)
         {
+            if (tokenState is null || myValue is null || chunked is null) return string.Empty;
             var first = chunked.First();
             chunked.Remove(first);
 
@@ -105,11 +109,12 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static string ReInsertCapturedTokens(this TokenState tokenState, string value)
         {
+            if (tokenState is null || value is null) return string.Empty;
             foreach (var token in tokenState.CapturedTokens)
             {
-                value = value.Replace(token.id, @$"{token.token}");
+                value = value?.Replace(token.id, @$"{token.token}");
             }
-            return value.Trim();
+            return value?.Trim();
         }
     }
 }

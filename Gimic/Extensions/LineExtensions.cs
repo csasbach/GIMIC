@@ -14,6 +14,7 @@ namespace Gimic.Extensions
         /// <param name="map"></param>
         public static void NormalizeIndentRelativeTo(this Line line, IMap map)
         {
+            if (line is null || map is null) return;
             line.TabCount = map.NestingLevel + 1;
         }
 
@@ -24,6 +25,7 @@ namespace Gimic.Extensions
         /// <param name="map"></param>
         public static void NormalizeOutdentRelativeTo(this Line line, IMap map)
         {
+            if (line is null || map is null) return;
             line.TabCount = Math.Max(map.NestingLevel - 1, 0);
         }
 
@@ -35,6 +37,7 @@ namespace Gimic.Extensions
         /// <param name="map"></param>
         public static void ParseLine(this Line line, StreamReader sr, IMap<string, dynamic> map)
         {
+            if (line is null || sr is null || map is null) return;
             line = line.SkipLinesWithNoKey(sr);
             if (string.IsNullOrWhiteSpace(line.Key) && sr.EndOfStream) return;
 
@@ -75,6 +78,7 @@ namespace Gimic.Extensions
         /// <param name="map"></param>
         public static void ParseValue(this Line line, StreamReader sr, IMap<string, dynamic> map)
         {
+            if (line is null || sr is null || map is null) return;
             var tokenState = new TokenState();
             dynamic value = sr.CaptureAndEscapeTokens((string)line.Value, ref tokenState);
 
@@ -92,6 +96,7 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static string GetKey(this string line)
         {
+            if (line is null) return string.Empty;
             return line.Substring(0, Math.Max(line.IndexOf(':'), 0)).TrimEnd(':');
         }
 
@@ -103,6 +108,7 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static string GetValue(this string line, string key)
         {
+            if (line is null || key is null) return string.Empty;
             return string.IsNullOrEmpty(line) ? line : line.Remove(0, key.Length + 1);
         }
 
@@ -113,6 +119,7 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static int GetIndentTabCount(this string line)
         {
+            if (line is null) return 0;
             var tabCount = 0;
             foreach (var ch in line)
             {
@@ -130,7 +137,8 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static Line SkipLinesWithNoKey(this Line line, StreamReader sr)
         {
-            while (string.IsNullOrWhiteSpace(line.Key) && !sr.EndOfStream) line = sr.EvaluateNextLine();
+            if (line is null || sr is null) return null;
+            while (string.IsNullOrWhiteSpace(line?.Key) && !sr.EndOfStream) line = sr.EvaluateNextLine();
             return line;
         }
 
@@ -146,6 +154,7 @@ namespace Gimic.Extensions
         public static bool IsMapValue(this Line line, IMap map, StreamReader sr, out Line lookAheadLine)
         {
             lookAheadLine = null;
+            if (line is null || map is null || sr is null) return false;
             if (string.IsNullOrWhiteSpace(line.Value) && !sr.EndOfStream)
             {
                 lookAheadLine = sr.EvaluateNextLine();

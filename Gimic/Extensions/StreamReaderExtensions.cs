@@ -15,11 +15,13 @@ namespace Gimic.Extensions
         /// <param name="map"></param>
         public static void ParseNext(this StreamReader sr, IMap<string, dynamic> map)
         {
+            if (sr is null || map is null) return;
             if (sr.EndOfStream) return;
             sr.EvaluateNextLine().ParseLine(sr, map);
         }
         public static void ParseMap(this StreamReader sr, IMap<string, dynamic> map, Line line, Line lookAheadLine)
         {
+            if (sr is null || map is null || line is null || lookAheadLine is null) return;
             var innerMap = new Map<string, dynamic>(map);
             map.Add(line.Key, innerMap);
             lookAheadLine.ParseLine(sr, innerMap);
@@ -32,6 +34,7 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static Line EvaluateNextLine(this StreamReader sr)
         {
+            if (sr is null) return null;
             var line = sr.ReadLine();
             var key = line.GetKey();
             var tabCount = line.GetIndentTabCount();
@@ -48,6 +51,7 @@ namespace Gimic.Extensions
         /// <returns></returns>
         public static string CaptureAndEscapeTokens(this StreamReader sr, string line, ref TokenState tokenState)
         {
+            if (sr is null || line is null || tokenState is null) return string.Empty;
             var inMiddleOfPartialToken = !string.IsNullOrEmpty(tokenState.PartialToken);
             var myValue = string.Empty;
 
@@ -97,6 +101,7 @@ namespace Gimic.Extensions
         /// <param name="myValue"></param>
         public static void AdvanceToNewLineUntilPartialTokenEnds(this StreamReader sr, ref TokenState tokenState, ref string myValue)
         {
+            if (sr is null || tokenState is null || myValue is null) return;
             tokenState.PartialToken += "\n";
             myValue += sr.CaptureAndEscapeTokens(sr.ReadLine(), ref tokenState);
         }
