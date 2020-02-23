@@ -50,24 +50,10 @@ namespace Gimic.Extensions
             else
             {
                 line.ParseValue(sr, map);
-                lookAheadLine.SafeParseLine(sr, map);
+                lookAheadLine.ParseLine(sr, map);
             }
 
             sr.ParseNext(map);
-        }
-
-        /// <summary>
-        /// Used for parsing look-ahead lines that may be null
-        /// </summary>
-        /// <param name="line"></param>
-        /// <param name="sr"></param>
-        /// <param name="map"></param>
-        public static void SafeParseLine(this Line line, StreamReader sr, IMap<string, dynamic> map)
-        {
-            if (!(line is null))
-            {
-                line.ParseLine(sr, map);
-            }
         }
 
         /// <summary>
